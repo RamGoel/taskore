@@ -3,7 +3,7 @@ import TaskDialog from "@/components/TaskDialog";
 import { Tabs, TabsContent } from "@/components/ui/tabs";
 import { useSearchParams } from "next/navigation";
 import TasksView from "@/components/TaskView";
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import moment from "moment";
 import CategoryTabs from "@/components/CategoryTabs";
 import GlobalFilters from "@/components/GlobalFilters";
@@ -14,9 +14,14 @@ export default function Home() {
   const status = (searchParams.get("status") ?? "OPEN") as string;
   const sortBy = (searchParams.get("sortBy") ?? "created_at") as string;
   const search = (searchParams.get("search") ?? "") as string;
-  const { allTasks } = useAppState();
+  const { allTasks, fetchTasks } = useAppState();
+
+  useEffect(() => {
+    fetchTasks();
+  }, []);
 
   const tasksToRender = useMemo(() => {
+    if (!allTasks) return [];
     const tasksInView = allTasks.filter((task) => task.status === status);
     return tasksInView
       .sort((a, b) => {
@@ -29,6 +34,8 @@ export default function Home() {
         return task.name.toLowerCase().startsWith(search.toLowerCase());
       });
   }, [status, sortBy, search, allTasks]);
+
+  if (!allTasks) return <div>Loading...</div>;
 
   const handleNavigate = (
     _path: string,

@@ -14,6 +14,7 @@ import { cn } from "@/lib/utils";
 import { Task, useAppState } from "@/store/useAppState";
 import moment from "moment";
 import { useEffect, useState } from "react";
+import { Skeleton } from "./ui/skeleton";
 
 const TasksView = ({ tasks }: { tasks: Task[] }) => {
   const [selectedRow, setSelectedRow] = useState<number>(-1);
@@ -36,14 +37,6 @@ const TasksView = ({ tasks }: { tasks: Task[] }) => {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [tasks, selectedRow]);
 
-  if (tasks.length === 0) {
-    return (
-      <div className="text-center h-40 flex items-center justify-center text-muted-foreground">
-        No tasks found
-      </div>
-    );
-  }
-
   return (
     <Table className="focus:outline-none">
       <TableHeader>
@@ -58,47 +51,55 @@ const TasksView = ({ tasks }: { tasks: Task[] }) => {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {tasks.map((task, index) => (
-          <TableRow
-            onClick={() =>
-              useAppState.setState({
-                activeTask: task,
-                isTaskDialogOpen: true,
-              })
-            }
-            key={task.id}
-            className={cn("h-[60px] cursor-pointer", {
-              "bg-accent": selectedRow === index,
-            })}
-          >
-            <TableCell>{index + 1}</TableCell>
-            <TableCell>
-              {task.name} (#{task.id})
-            </TableCell>
-            <TableCell>
-              <PriorityBadge status={task.priority as TaskPriority} />
-            </TableCell>
-            <TableCell className="hidden md:table-cell">
-              <div className="flex flex-wrap gap-2">
-                {task.labels.map((label) => (
-                  <StatusBadge key={label} label={label} />
-                ))}
-              </div>
-            </TableCell>
-            <TableCell className="hidden md:table-cell">
-              {task.assignee}
-            </TableCell>
-            <TableCell className="hidden lg:table-cell">
-              {moment(task.due_date).format("DD MMM, YYYY hh:mma")}
-            </TableCell>
-            <TableCell
-              className="hidden lg:table-cell"
-              title={moment(task.created_at).format("DD/MM/YYYY hh:mm:ss")}
-            >
-              {moment(task.created_at).format("DD/MM/YYYY hh:mma")}
-            </TableCell>
-          </TableRow>
-        ))}
+        {tasks.length === 0
+          ? Array.from({ length: 10 }).map((_, index) => (
+              <TableRow key={index} className="h-[60px]">
+                <TableCell className="flex items-center justify-center">
+                  <Skeleton className="h-9 w-full" />
+                </TableCell>
+              </TableRow>
+            ))
+          : tasks.map((task, index) => (
+              <TableRow
+                onClick={() =>
+                  useAppState.setState({
+                    activeTask: task,
+                    isTaskDialogOpen: true,
+                  })
+                }
+                key={task.id}
+                className={cn("h-[60px] cursor-pointer", {
+                  "bg-accent": selectedRow === index,
+                })}
+              >
+                <TableCell>{index + 1}</TableCell>
+                <TableCell>
+                  {task.name} (#{task.id})
+                </TableCell>
+                <TableCell>
+                  <PriorityBadge status={task.priority as TaskPriority} />
+                </TableCell>
+                <TableCell className="hidden md:table-cell">
+                  <div className="flex flex-wrap gap-2">
+                    {task.labels.map((label) => (
+                      <StatusBadge key={label} label={label} />
+                    ))}
+                  </div>
+                </TableCell>
+                <TableCell className="hidden md:table-cell">
+                  {task.assignee}
+                </TableCell>
+                <TableCell className="hidden lg:table-cell">
+                  {moment(task.due_date).format("DD MMM, YYYY hh:mma")}
+                </TableCell>
+                <TableCell
+                  className="hidden lg:table-cell"
+                  title={moment(task.created_at).format("DD/MM/YYYY hh:mm:ss")}
+                >
+                  {moment(task.created_at).format("DD/MM/YYYY hh:mma")}
+                </TableCell>
+              </TableRow>
+            ))}
       </TableBody>
     </Table>
   );

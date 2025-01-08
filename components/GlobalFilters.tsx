@@ -7,7 +7,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Input } from "./ui/input";
-import { SortAsc, SortDesc, X } from "lucide-react";
+import { SortDesc, X } from "lucide-react";
 
 const GlobalFilters = ({
   search,
