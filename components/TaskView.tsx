@@ -52,6 +52,14 @@ const TasksView = ({ tasks }: { tasks: Task[] }) => {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [tasks.length, tasks, selectedRow]);
 
+  if (tasks.length === 0) {
+    return (
+      <div className="text-center h-40 flex items-center justify-center text-muted-foreground">
+        No tasks found
+      </div>
+    );
+  }
+
   return (
     <Table className="focus:outline-none">
       <TableHeader>
