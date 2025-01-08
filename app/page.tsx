@@ -2,7 +2,7 @@
 import TaskDialog from "@/components/TaskDialog";
 import { Tabs, TabsContent } from "@/components/ui/tabs";
 import { getTasks } from "@/lib/data";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import TasksView from "@/components/TaskView";
 import { useMemo } from "react";
 import moment from "moment";
@@ -24,9 +24,25 @@ export default function Home() {
         return moment(b.created_at).diff(moment(a.created_at));
       })
       .filter((task) => {
-        return task.name.toLowerCase().includes(search.toLowerCase());
+        return task.name.toLowerCase().startsWith(search.toLowerCase());
       });
   }, [status, sortBy, search]);
+
+  const handleNavigate = (
+    _path: string,
+    _sortBy: string,
+    _search: string,
+    _status: string
+  ) => {
+    history.replaceState(
+      null,
+      "",
+      `${_path}?status=${_status}&sortBy=${_sortBy}&search=${_search.replace(
+        " ",
+        "%20"
+      )}`
+    );
+  };
 
   return (
     <div className="min-h-screen w-full p-6 bg-background ">
@@ -36,26 +52,17 @@ export default function Home() {
         className="w-full flex flex-col gap-4"
       >
         <div className="flex items-center justify-between">
-          <CategoryTabs sortBy={sortBy} />
+          <CategoryTabs
+            handleNavigate={(status) =>
+              handleNavigate("/", sortBy, search, status)
+            }
+          />
           <GlobalFilters
-            status={status}
             sortBy={sortBy}
             search={search}
-            setSearchValue={(value) => {
-              if (value === "") {
-                history.replaceState(
-                  null,
-                  "",
-                  `/?status=${status}&sortBy=${sortBy}`
-                );
-              } else {
-                history.replaceState(
-                  null,
-                  "",
-                  `/?status=${status}&sortBy=${sortBy}&search=${value}`
-                );
-              }
-            }}
+            handleNavigate={(_sortBy, _search) =>
+              handleNavigate("/", _sortBy, _search, status)
+            }
           />
         </div>
         <TabsContent value={status}>

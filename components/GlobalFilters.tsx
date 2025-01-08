@@ -7,21 +7,17 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Input } from "./ui/input";
-import { useRouter } from "next/navigation";
 import { X } from "lucide-react";
 
 const GlobalFilters = ({
   search,
-  status,
   sortBy,
-  setSearchValue,
+  handleNavigate,
 }: {
-  status: string;
   sortBy: string;
   search: string;
-  setSearchValue: (value: string) => void;
+  handleNavigate: (sortBy: string, search: string) => void;
 }) => {
-  const router = useRouter();
   return (
     <div className="w-full max-w-md flex items-center gap-2">
       <div className="relative">
@@ -29,20 +25,18 @@ const GlobalFilters = ({
           placeholder="Search"
           value={search || ""}
           onChange={(e) => {
-            setSearchValue(e.target.value);
+            handleNavigate(sortBy, e.target.value);
           }}
         />
         <X
           onClick={() => {
-            setSearchValue("");
+            handleNavigate(sortBy, "");
           }}
           className="w-4 h-4 absolute right-2 opacity-50 hover:opacity-100 cursor-pointer top-1/2 -translate-y-1/2"
         />
       </div>
       <Select
-        onValueChange={(value) =>
-          router.push(`?status=${status}&sortBy=${value}`)
-        }
+        onValueChange={(value) => handleNavigate(value, search)}
         defaultValue={sortBy}
       >
         <SelectTrigger className="w-[180px]">

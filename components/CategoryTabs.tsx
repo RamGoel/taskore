@@ -1,28 +1,24 @@
 import React from "react";
 import { TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { getTasks } from "@/lib/data";
-import { useRouter } from "next/navigation";
 
-const CategoryTabs = ({ sortBy }: { sortBy: string }) => {
-  const router = useRouter();
+const CategoryTabs = ({
+  handleNavigate,
+}: {
+  handleNavigate: (status: string) => void;
+}) => {
   return (
     <TabsList className="w-fit">
-      <TabsTrigger
-        onClick={() => router.push(`?status=OPEN&sortBy=${sortBy}`)}
-        value="OPEN"
-      >
+      <TabsTrigger onClick={() => handleNavigate("OPEN")} value="OPEN">
         Open ({getTasks("OPEN").length})
       </TabsTrigger>
       <TabsTrigger
-        onClick={() => router.push(`?status=IN_PROGRESS&sortBy=${sortBy}`)}
+        onClick={() => handleNavigate("IN_PROGRESS")}
         value="IN_PROGRESS"
       >
         In Progress ({getTasks("IN_PROGRESS").length})
       </TabsTrigger>
-      <TabsTrigger
-        onClick={() => router.push(`?status=CLOSED&sortBy=${sortBy}`)}
-        value="CLOSED"
-      >
+      <TabsTrigger onClick={() => handleNavigate("CLOSED")} value="CLOSED">
         Closed ({getTasks("CLOSED").length})
       </TabsTrigger>
     </TabsList>
