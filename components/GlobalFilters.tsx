@@ -7,7 +7,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Input } from "./ui/input";
-import { X } from "lucide-react";
+import { SortAsc, SortDesc, X } from "lucide-react";
 
 const GlobalFilters = ({
   search,
@@ -39,7 +39,8 @@ const GlobalFilters = ({
         onValueChange={(value) => handleNavigate(value, search)}
         defaultValue={sortBy}
       >
-        <SelectTrigger className="w-[180px]">
+        <SelectTrigger className="w-[180px] gap-1">
+          <SortDesc className="w-4 h-4 mr-[-40px]" />
           <SelectValue placeholder="Sort by" />
         </SelectTrigger>
         <SelectContent>
