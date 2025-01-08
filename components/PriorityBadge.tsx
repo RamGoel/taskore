@@ -16,7 +16,7 @@ const PriorityBadge = ({ status }: { status: TaskPriority }) => {
 
   return (
     <div
-      className={`text-xs font-medium ${statusColor[status]} text-primary-foreground px-2 py-1 rounded-full w-fit flex items-center gap-2`}
+      className={`text-xs font-medium ${statusColor[status]} px-2 py-1 rounded-full w-fit flex items-center gap-2`}
     >
       {priorityIcons[status]}
       {status}

@@ -180,3 +180,8 @@ export const tasks = [
     comment: "Fixing known issues",
   },
 ];
+
+export const getTasks = (status: string) => {
+  const filteredTasks = tasks.filter((task) => task.status === status);
+  return filteredTasks;
+};

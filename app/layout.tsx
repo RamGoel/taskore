@@ -13,6 +13,9 @@ export const metadata: Metadata = {
     icon: "/favicon.ico",
   },
   themeColor: "#000000",
+  openGraph: {
+    images: "/og-image.png",
+  },
 };
 
 export default function RootLayout({

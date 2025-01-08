@@ -1,11 +1,6 @@
 const StatusBadge = ({ label }: { label: string }) => {
   const RANDOM_COLOR_CLASSES = [
-    "bg-green-500/30 text-green-500 border border-green-500",
-    "bg-blue-500/30 text-blue-500 border border-blue-500",
-    "bg-red-500/30 text-red-500 border border-red-500",
-    "bg-yellow-500/30 text-yellow-500 border border-yellow-500",
-    "bg-purple-500/30 text-purple-500 border border-purple-500",
-    "bg-pink-500/30 text-pink-500 border border-pink-500",
+    "bg-gray-500/30 text-gray-300 border border-gray-500",
   ];
   const randomColor =
     RANDOM_COLOR_CLASSES[
@@ -13,7 +8,7 @@ const StatusBadge = ({ label }: { label: string }) => {
     ];
   return (
     <p
-      className={`text-xs font-medium ${randomColor} text-primary-foreground px-2 py-1 rounded-full w-fit`}
+      className={`text-xs font-medium ${randomColor} px-2 py-1 rounded-full w-fit`}
     >
       {label}
     </p>
