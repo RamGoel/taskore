@@ -16,35 +16,20 @@ import moment from "moment";
 import { useEffect, useState } from "react";
 
 const TasksView = ({ tasks }: { tasks: Task[] }) => {
-  const [selectedRow, setSelectedRow] = useState<number | null>(null);
+  const [selectedRow, setSelectedRow] = useState<number>(-1);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "ArrowUp") {
-        setSelectedRow((prev) =>
-          prev === null
-            ? tasks.length - 1
-            : prev === 0
-            ? tasks.length - 1
-            : prev - 1
-        );
+        setSelectedRow((prev) => (prev === -1 ? tasks.length - 1 : prev - 1));
       } else if (e.key === "ArrowDown") {
-        setSelectedRow((prev) =>
-          prev === null ? 0 : prev === tasks.length - 1 ? 0 : prev + 1
-        );
-      } else if (e.key === "Enter") {
+        setSelectedRow((prev) => (prev === tasks.length - 1 ? 0 : prev + 1));
+      } else if (e.key === "Enter" && selectedRow !== -1) {
         e.preventDefault();
-        if (selectedRow !== null) {
-          useAppState.setState({
-            activeTask: tasks.find((task) => task.id === selectedRow),
-            isTaskDialogOpen: true,
-          });
-        } else {
-          useAppState.setState({
-            activeTask: tasks[0],
-            isTaskDialogOpen: true,
-          });
-        }
+        useAppState.setState({
+          activeTask: tasks[selectedRow],
+          isTaskDialogOpen: true,
+        });
       }
     };
 
@@ -84,7 +69,7 @@ const TasksView = ({ tasks }: { tasks: Task[] }) => {
             }
             key={task.id}
             className={cn("h-[60px] cursor-pointer", {
-              "bg-accent": selectedRow === task.id,
+              "bg-accent": selectedRow === index,
             })}
           >
             <TableCell>{index + 1}</TableCell>
