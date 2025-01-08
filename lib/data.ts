@@ -360,8 +360,3 @@ export const tasks = [
     comment: "Critical bugs identified",
   },
 ];
-
-export const getTasks = (status: string) => {
-  const filteredTasks = tasks.filter((task) => task.status === status);
-  return filteredTasks;
-};

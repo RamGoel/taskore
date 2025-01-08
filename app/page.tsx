@@ -1,22 +1,24 @@
 "use client";
 import TaskDialog from "@/components/TaskDialog";
 import { Tabs, TabsContent } from "@/components/ui/tabs";
-import { getTasks } from "@/lib/data";
 import { useSearchParams } from "next/navigation";
 import TasksView from "@/components/TaskView";
 import { useMemo } from "react";
 import moment from "moment";
 import CategoryTabs from "@/components/CategoryTabs";
 import GlobalFilters from "@/components/GlobalFilters";
+import { useAppState } from "@/store/useAppState";
 
 export default function Home() {
   const searchParams = useSearchParams();
   const status = (searchParams.get("status") ?? "OPEN") as string;
   const sortBy = (searchParams.get("sortBy") ?? "created_at") as string;
   const search = (searchParams.get("search") ?? "") as string;
+  const { allTasks } = useAppState();
 
   const tasksToRender = useMemo(() => {
-    return getTasks(status)
+    const tasksInView = allTasks.filter((task) => task.status === status);
+    return tasksInView
       .sort((a, b) => {
         if (sortBy === "due_date") {
           return moment(b.due_date).diff(moment(a.due_date));
@@ -26,7 +28,7 @@ export default function Home() {
       .filter((task) => {
         return task.name.toLowerCase().startsWith(search.toLowerCase());
       });
-  }, [status, sortBy, search]);
+  }, [status, sortBy, search, allTasks]);
 
   const handleNavigate = (
     _path: string,

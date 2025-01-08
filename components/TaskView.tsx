@@ -32,10 +32,9 @@ const TasksView = ({ tasks }: { tasks: Task[] }) => {
         });
       }
     };
-
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [tasks.length, tasks, selectedRow]);
+  }, [tasks, selectedRow]);
 
   if (tasks.length === 0) {
     return (

@@ -24,7 +24,6 @@ const GlobalFilters = ({
         <Input
           placeholder="Search"
           value={search || ""}
-          autoFocus
           onChange={(e) => {
             handleNavigate(sortBy, e.target.value);
           }}
