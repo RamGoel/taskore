@@ -8,6 +8,7 @@ import moment from "moment";
 import CategoryTabs from "@/components/CategoryTabs";
 import GlobalFilters from "@/components/GlobalFilters";
 import { useAppState } from "@/store/useAppState";
+import { handleNavigate } from "@/lib/utils";
 
 export default function MainComponent() {
   const searchParams = useSearchParams();
@@ -34,24 +35,6 @@ export default function MainComponent() {
         return task.name.toLowerCase().startsWith(search.toLowerCase());
       });
   }, [status, sortBy, search, allTasks]);
-
-  if (!allTasks) return <div>Loading...</div>;
-
-  const handleNavigate = (
-    _path: string,
-    _sortBy: string,
-    _search: string,
-    _status: string
-  ) => {
-    history.replaceState(
-      null,
-      "",
-      `${_path}?status=${_status}&sortBy=${_sortBy}&search=${_search.replace(
-        " ",
-        "%20"
-      )}`
-    );
-  };
 
   return (
     <div className="min-h-screen w-full p-6 bg-background ">

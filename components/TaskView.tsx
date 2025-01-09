@@ -15,7 +15,7 @@ import { Task, useAppState } from "@/store/useAppState";
 import moment from "moment";
 import { useEffect, useState } from "react";
 import { Skeleton } from "./ui/skeleton";
-import { ArrowUpDown } from "lucide-react";
+import { ArrowUpDown, PaintBucketIcon } from "lucide-react";
 import { Button } from "./ui/button";
 
 const TasksView = ({ tasks }: { tasks: Task[] }) => {
@@ -24,6 +24,7 @@ const TasksView = ({ tasks }: { tasks: Task[] }) => {
     key: keyof Task | null;
     direction: "asc" | "desc";
   }>({ key: null, direction: "asc" });
+  const { isLoading } = useAppState();
 
   const sortedTasks = [...tasks].sort((a, b) => {
     if (!sortConfig.key) return 0;
@@ -93,6 +94,17 @@ const TasksView = ({ tasks }: { tasks: Task[] }) => {
     </TableHead>
   );
 
+  if (!isLoading && sortedTasks.length === 0) {
+    return (
+      <div className="flex h-40 items-center justify-center">
+        <p className="text-muted-foreground flex items-center gap-2">
+          <PaintBucketIcon strokeWidth={1.5} className="h-5 w-5" /> No tasks
+          found :/
+        </p>
+      </div>
+    );
+  }
+
   return (
     <Table className="focus:outline-none">
       <TableHeader>
@@ -126,7 +138,7 @@ const TasksView = ({ tasks }: { tasks: Task[] }) => {
       </TableHeader>
 
       <TableBody>
-        {sortedTasks.length === 0
+        {sortedTasks.length === 0 && isLoading
           ? Array.from({ length: 10 }).map((_, index) => (
               <TableRow key={index} className="h-[60px]">
                 <TableCell className="flex items-center justify-center">
