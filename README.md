@@ -1,36 +1,51 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-## Getting Started
+# Taskore
 
-First, run the development server:
+Taskore is a Shadcn grid which supports column wise sorting and global search by name
+
+
+## Folder Structure
+
+`app`: This contains our routes (only / route in this case) \
+`components`: It contains the components created for the app
+`components/ui`: It contains the components added by shadcn \
+`lib`: It contains the util functions, static data, and types\
+`store`: It contain the zustand global store for the app \
+`public`: contains the static assets (nothing in our case)
+
+
+### System Design
+
+- The `layout.tsx` is the main wrapper around app, it defines the metadata and HTML layout.
+- The `app/page.tsx` is the entry point, which imports the MainComponent and renders it by wrapping into suspense. Suspense because I'm using `useSearchParams` and it executes on client side
+- The MainComponent access all the params, fetch all the tasks on load.
+- It also filters the tasks based on the values of params.
+- Inside `store/useAppStore.tsx`, there is a fetchTasks function which applies a fake delay of 1s and returns the tasks array.
+
+
+## Run Locally
+
+Clone the project
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+  git clone https://github.com/RamGoel/taskore
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Go to the project directory
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+  cd taskore
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Install dependencies
 
-## Learn More
+```bash
+  npm install 
+```
 
-To learn more about Next.js, take a look at the following resources:
+Start the application
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+  npm run dev
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
