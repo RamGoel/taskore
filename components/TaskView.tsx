@@ -140,7 +140,7 @@ const TasksView = ({ tasks }: { tasks: Task[] }) => {
       <TableBody>
         {sortedTasks.length === 0 && isLoading
           ? Array.from({ length: 10 }).map((_, index) => (
-              <TableRow key={index} className="h-[60px]">
+              <TableRow key={index} className="h-[75px]">
                 <TableCell className="flex items-center justify-center">
                   <Skeleton className="h-9 w-full" />
                 </TableCell>
