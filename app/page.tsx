@@ -55,7 +55,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen w-full p-6 bg-background ">
-      <TaskDialog />
+      <TaskDialog tasks={tasksToRender} />
       <Tabs
         defaultValue={status || "OPEN"}
         className="w-full flex flex-col gap-4"

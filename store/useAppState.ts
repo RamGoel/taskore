@@ -1,3 +1,4 @@
+import { tasks } from "@/lib/data";
 import { create } from "zustand";
 
 export interface Task {
@@ -34,8 +35,8 @@ export const useAppState = create<AppState>()((set) => ({
   setIsTaskDialogOpen: (open) => set({ isTaskDialogOpen: open }),
   fetchTasks: async () => {
     set({ isLoading: true });
-    const response = await fetch("/api/tasks");
-    const data = await response.json();
-    set({ allTasks: data, isLoading: false });
+    setTimeout(() => {
+      set({ allTasks: tasks, isLoading: false });
+    }, 1000);
   },
 }));

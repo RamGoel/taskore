@@ -50,6 +50,7 @@ const TasksView = ({ tasks }: { tasks: Task[] }) => {
           <TableHead className="hidden lg:table-cell">Created</TableHead>
         </TableRow>
       </TableHeader>
+
       <TableBody>
         {tasks.length === 0
           ? Array.from({ length: 10 }).map((_, index) => (

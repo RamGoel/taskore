@@ -21,49 +21,39 @@ import {
 import { Input } from "./ui/input";
 import { MessageSquare } from "lucide-react";
 
-const TaskDialog = () => {
+const TaskDialog = ({ tasks }: { tasks: Task[] }) => {
   const { activeTask, isTaskDialogOpen } = useAppState();
   const [newStatus, setNewStatus] = useState<string | null>(null);
   const [comment, setComment] = useState("");
   const [showCommentDialog, setShowCommentDialog] = useState(false);
-  const [currentTaskIndex, setCurrentTaskIndex] = useState(0);
   const { allTasks, setAllTasks, setActiveTask, setIsTaskDialogOpen } =
     useAppState();
-  const [tasksInView, setTasksInView] = useState<Task[]>(
-    allTasks.filter((task) => task.status === activeTask?.status)
-  );
 
   useEffect(() => {
     if (activeTask) {
-      setTasksInView(
-        allTasks.filter((task) => task.status === activeTask.status)
-      );
-      setCurrentTaskIndex(
-        tasksInView.findIndex((task) => task.id === activeTask.id)
-      );
       setComment(activeTask.comment);
     }
-  }, [activeTask, allTasks]);
-
-  useEffect(() => {
-    setTasksInView(
-      allTasks.filter((task) => task.status === activeTask?.status)
-    );
-  }, [activeTask, allTasks]);
+  }, [activeTask]);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (!isTaskDialogOpen) return;
 
+      const sameStatusTasks = tasks;
+
       if (e.key === "ArrowRight") {
-        const nextIndex = (currentTaskIndex + 1) % tasksInView.length;
-        useAppState.setState({ activeTask: tasksInView[nextIndex] });
+        const currentIndex = sameStatusTasks.findIndex(
+          (task) => task.id === activeTask?.id
+        );
+        const nextIndex = (currentIndex + 1) % sameStatusTasks.length;
+        setActiveTask(sameStatusTasks[nextIndex]);
       } else if (e.key === "ArrowLeft") {
+        const currentIndex = sameStatusTasks.findIndex(
+          (task) => task.id === activeTask?.id
+        );
         const prevIndex =
-          currentTaskIndex === 0
-            ? tasksInView.length - 1
-            : currentTaskIndex - 1;
-        useAppState.setState({ activeTask: tasksInView[prevIndex] });
+          currentIndex === 0 ? sameStatusTasks.length - 1 : currentIndex - 1;
+        setActiveTask(sameStatusTasks[prevIndex]);
       } else if (e.key >= "1" && e.key <= "3") {
         const statusMap = {
           "1": "OPEN",
@@ -77,7 +67,7 @@ const TaskDialog = () => {
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [isTaskDialogOpen, currentTaskIndex, tasksInView]);
+  }, [isTaskDialogOpen, activeTask, allTasks, setActiveTask]);
 
   const handleStatusChange = (status: string) => {
     setNewStatus(status);
@@ -131,11 +121,8 @@ const TaskDialog = () => {
           <div>
             <div className="flex items-center gap-2">
               <div className="flex flex-1 flex-col">
-                <p className="text-md flex-1 whitespace-nowrap font-medium">
-                  Change Status
-                </p>
-                <p className="text-sm text-muted-foreground">
-                  1: Open, 2: In Progress, 3: Closed
+                <p className="text-sm flex-1 whitespace-nowrap font-medium">
+                  Change Status:
                 </p>
               </div>
               <Select
@@ -153,8 +140,14 @@ const TaskDialog = () => {
               </Select>
             </div>
           </div>
+          <hr className="" />
           <DialogFooter>
-            <Button onClick={handleClose}>Close</Button>
+            <div className="flex items-center justify-between gap-2 w-full">
+              <p className="text-sm text-muted-foreground">
+                1, 2, 3 to change status, {"<- ->"} to navigate
+              </p>
+              <Button onClick={handleClose}>Close</Button>
+            </div>
           </DialogFooter>
         </DialogContent>
       </Dialog>
